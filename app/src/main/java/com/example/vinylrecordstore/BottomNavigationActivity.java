@@ -2,16 +2,22 @@ package com.example.vinylrecordstore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class BottomNavigationActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
+    String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +25,7 @@ public class BottomNavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_navigation);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        openFragment(HomeFragment.newInstance("", ""));
+        openFragment(InfoFragment.newInstance("", ""));
     }
 
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -36,6 +42,9 @@ public class BottomNavigationActivity extends AppCompatActivity {
                         case R.id.navigation_cart:
                             openFragment(CartFragment.newInstance("", ""));
                             return true;
+                        case R.id.navigation_orders:
+                            openFragment(OrdersFragment.newInstance("", ""));
+                            return true;
                     }
                     return false;
                 }
@@ -47,4 +56,5 @@ public class BottomNavigationActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
 }

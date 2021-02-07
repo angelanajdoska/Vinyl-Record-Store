@@ -6,15 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
-
+import com.example.vinylrecordstore.models.Orders;
 import com.example.vinylrecordstore.models.Products;
+import com.example.vinylrecordstore.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyDatabase extends SQLiteOpenHelper {
-    private static final int DB_VERSION = 10;
+    private static final int DB_VERSION = 17;
     private static final String DB_NAME = "Users";
     private static final String TABLE_Users = "user_details";
     private static final String KEY_ID = "id";
@@ -32,6 +32,12 @@ public class MyDatabase extends SQLiteOpenHelper {
     private static final String KEY_PRICE = "price";
     private static final String KEY_IMAGE = "image";
 
+    private static final String TABLE_Orders = "orders";
+    private static final String ORDERS_ID = "id";
+    private static final String ORDERS_ALBUM = "album";
+    private static final String ORDERS_PRICE = "price";
+    private static final String ORDERS_IMAGE = "image";
+
     public MyDatabase(Context context){
         super(context,DB_NAME, null, DB_VERSION);
     }
@@ -47,17 +53,26 @@ public class MyDatabase extends SQLiteOpenHelper {
                 + KEY_PASSWORD + " TEXT"+")";
         db.execSQL(CREATE_TABLE1);
         String CREATE_TABLE2 = "CREATE TABLE " + TABLE_Products + "("
-                + PRODUCTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + KEY_ALBUM + " TEXT,"
+                + PRODUCTS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + KEY_ALBUM + " TEXT,"
                 + KEY_ARTIST + " TEXT,"
                 + KEY_PRICE+ " TEXT,"
                 + KEY_IMAGE + " INTEGER"+")";
         db.execSQL(CREATE_TABLE2);
+        String CREATE_TABLE3 = "CREATE TABLE " + TABLE_Orders + "("
+                + ORDERS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + ORDERS_ALBUM+ " TEXT,"
+                + ORDERS_PRICE + " TEXT,"
+                + ORDERS_IMAGE + " INTEGER"+")";
+        db.execSQL(CREATE_TABLE3);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Users);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Products);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Orders);
         onCreate(db);
     }
     void insertUserDetails(String name, String address, String city, String phone, String email, String password){
@@ -120,6 +135,7 @@ public class MyDatabase extends SQLiteOpenHelper {
 
         String query = "SELECT * FROM "+ TABLE_Products;
 
+
             Cursor cursor = db.rawQuery(query, new String[]{});
 
             while (cursor.moveToNext()) {
@@ -133,8 +149,10 @@ public class MyDatabase extends SQLiteOpenHelper {
                         new Products(id, album, artist, price, image);
                 returnList.add(product);
             }
+
             cursor.close();
             db.close();
+
 
         return returnList;
     }
@@ -163,5 +181,77 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL(" DELETE FROM " + TABLE_Products);
         db.close();
     }
+    public List<Orders> getOrders() {
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            onCreate(db);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<Orders> returnList = new ArrayList<>();
+
+        String query = "SELECT * FROM "+ TABLE_Orders;
+
+
+        Cursor cursor = db.rawQuery(query, new String[]{});
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String album = cursor.getString(1);
+            String price = cursor.getString(2);
+            int image = cursor.getInt(3);
+
+            Orders orders =
+                    new Orders(id, album, price, image);
+            returnList.add(orders);
+        }
+
+        cursor.close();
+        db.close();
+
+
+        return returnList;
+    }
+    void insertOrder(String album, String price, Integer image){
+        //Get the Data Repository in write mode
+        SQLiteDatabase db = this.getWritableDatabase();
+        //Create a new map of values, where column names are the keys
+        ContentValues cValues = new ContentValues();
+        cValues.put(ORDERS_ALBUM, album);
+        cValues.put(ORDERS_PRICE, price);
+        cValues.put(ORDERS_IMAGE, image);
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(TABLE_Orders, null, cValues);
+        db.close();
+    }
+    public List<User> getUser() {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        try {
+            onCreate(db);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<User> returnList = new ArrayList<>();
+
+        String query = "SELECT * FROM "+ TABLE_Users;
+
+        Cursor cursor = db.rawQuery(query, new String[]{});
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(0);
+            String name = cursor.getString(1);
+            String address = cursor.getString(2);
+            String city = cursor.getString(3);
+            int phone = cursor.getInt(4);
+            String email = cursor.getString(5);
+
+            User user =
+                    new User(id, email, name, city, address, phone);
+            returnList.add(user);
+        }
+        cursor.close();
+        db.close();
+        return returnList;
+    }
 }

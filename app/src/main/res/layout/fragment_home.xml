@@ -10,7 +10,6 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:src="@drawable/logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -20,7 +19,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/products"
         android:layout_width="415dp"
-        android:layout_height="557dp"
+        android:layout_height="549dp"
         android:layout_marginTop="144dp"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"

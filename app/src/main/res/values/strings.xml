@@ -3,5 +3,7 @@
     <string name="register"><u>REGISTER</u></string>
     <string name="vinyl_records">We agree: it just sounds better on vinyl. Build or expand your collection with popular pre-orders, new releases, and best-selling vinyl.</string>
     <string name="directions"><u>GET DIRECTIONS</u></string>
-    <string name="dialog">By clicking <b>YES</b> your order will be placed. Are you sure you want to proceed?</string>
+    <string name="dialog">Are you sure you want to proceed?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

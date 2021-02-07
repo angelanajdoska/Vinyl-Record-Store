@@ -37,6 +37,8 @@ public class CartFragment extends Fragment {
     Double price = 0.0;
     Products product;
     AlertDialog.Builder builder;
+    LoginActivity user;
+    RegisterActivity register;
 
     public CartFragment() {
         // Required empty public constructor
@@ -88,6 +90,9 @@ public class CartFragment extends Fragment {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 MyDatabase myDatabase = new MyDatabase(v.getContext());
+                                for (Products item : productsList) {
+                                    myDatabase.insertOrder(item.getAlbum(), item.getPrice(), item.getImage());
+                                }
                                 myDatabase.deleteAll();
                                 myDatabase.close();
                                 mAdapter.notifyDataSetChanged();
